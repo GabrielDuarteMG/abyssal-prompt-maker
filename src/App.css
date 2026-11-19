@@ -1,0 +1,313 @@
+/* Unlayered: wins over Astryx @layer styles. */
+.app-bg {
+  min-block-size: 100dvh;
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-background-blue) 70%, transparent), transparent 55%),
+    radial-gradient(circle at 80% 80%, color-mix(in srgb, var(--color-background-purple) 70%, transparent), transparent 55%),
+    var(--color-background-body);
+}
+
+/* App-like: the viewport is locked and each pane scrolls on its own. */
+.app-shell {
+  block-size: 100dvh;
+  max-inline-size: 90rem;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(17.5rem, 2fr);
+  gap: var(--spacing-6, 24px);
+  padding: var(--spacing-6, 24px);
+}
+
+.glass-card {
+  background: color-mix(in srgb, var(--color-background-card) 65%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-card {
+    background: var(--color-background-card);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Card renders its children in a single div: header and footer stay put, only the body scrolls. */
+.pane-card {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  block-size: 100%;
+}
+
+.preview-pane {
+  min-block-size: 0;
+}
+
+.form-card {
+  container: form-card / inline-size;
+}
+
+.pane-header,
+.pane-footer {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3, 12px);
+  padding: var(--spacing-4, 16px) var(--spacing-5, 20px);
+}
+
+.pane-header {
+  border-block-end: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+}
+
+.pane-footer {
+  border-block-start: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+}
+
+.pane-body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: var(--spacing-5, 20px);
+}
+
+/* tabIndex=-1 container, focused only programmatically. */
+.pane-body:focus {
+  outline: none;
+}
+
+.title-row,
+.preview-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2, 8px) var(--spacing-3, 12px);
+}
+
+.title-row > :first-child,
+.preview-header > :first-child {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.wizard-footer {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wizard-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-1, 4px);
+}
+
+.shortcut-hint {
+  display: flex;
+  gap: var(--spacing-1, 4px);
+}
+
+@media not ((hover: hover) and (pointer: fine)) {
+  .shortcut-hint {
+    display: none;
+  }
+}
+
+@container form-card (inline-size < 24rem) {
+  .wizard-progress {
+    display: none;
+  }
+}
+
+.step-section + .step-section {
+  border-block-start: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+  padding-block-start: var(--spacing-6, 24px);
+}
+
+.step-section:focus {
+  outline: none;
+}
+
+.summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--spacing-3, 12px);
+}
+
+.summary-row > :first-child {
+  flex: 0 0 10rem;
+}
+
+.summary-row > :last-child {
+  flex: 1 1 13rem;
+  min-inline-size: 0;
+}
+
+.editable-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2, 8px);
+}
+
+/* Actions wrap under the field when it would get narrower than 12rem. */
+.list-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2, 8px);
+}
+
+.list-row[data-multiline] {
+  align-items: end;
+}
+
+.list-row-field {
+  flex: 1 1 12rem;
+  min-inline-size: 0;
+}
+
+.list-row-actions {
+  display: flex;
+  gap: var(--spacing-1, 4px);
+  margin-inline-start: auto;
+}
+
+.item-marker {
+  display: inline-block;
+  min-width: 2ch;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-list {
+  padding: var(--spacing-4, 16px);
+  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  border-radius: var(--radius-container, 12px);
+  background: color-mix(in srgb, var(--color-background-card) 50%, transparent);
+}
+
+.prompt-preview {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2, 8px);
+}
+
+.prompt-block {
+  padding: var(--spacing-2, 8px) var(--spacing-3, 12px);
+  border-radius: var(--radius-container, 12px);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+.prompt-block:hover {
+  background: color-mix(in srgb, var(--color-border) 20%, transparent);
+}
+
+.prompt-block[data-active] {
+  border-color: var(--color-border-blue);
+  background: color-mix(in srgb, var(--color-background-blue) 45%, transparent);
+}
+
+.prompt-block.is-placeholder {
+  border-style: dashed;
+  border-color: var(--color-border-emphasized);
+  cursor: default;
+  color: var(--color-text-secondary);
+}
+
+.prompt-block pre {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prompt-block {
+    transition: none;
+  }
+}
+
+.dock-toggle {
+  display: none;
+}
+
+/* Phone: form on top, preview docked at the bottom (second grid row). */
+@media (width < 45rem) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: var(--spacing-3, 12px);
+    padding: var(--spacing-3, 12px);
+  }
+  .pane-header,
+  .pane-footer {
+    padding: var(--spacing-3, 12px);
+  }
+  .pane-body {
+    padding: var(--spacing-3, 12px);
+  }
+  .preview-card {
+    block-size: auto;
+  }
+  .preview-card .prompt-preview {
+    flex: none;
+    block-size: min(8rem, 22dvh);
+  }
+  .preview-pane[data-expanded] .prompt-preview {
+    block-size: 60dvh;
+  }
+  .dock-toggle {
+    display: inline-flex;
+  }
+}
+
+/* Short viewport (phone landscape): unlock the page; the preview sticks. */
+@media (height < 32rem) {
+  .app-shell {
+    block-size: auto;
+    min-block-size: 100dvh;
+  }
+  .form-card {
+    block-size: auto;
+  }
+  .form-card .pane-body {
+    overflow: visible;
+  }
+  .preview-pane {
+    position: sticky;
+    inset-block-start: var(--spacing-3, 12px);
+    align-self: start;
+  }
+  .preview-card {
+    block-size: auto;
+    max-block-size: calc(100dvh - 2 * var(--spacing-3, 12px));
+  }
+}
+
+@media (height < 32rem) and (width < 45rem) {
+  .preview-pane {
+    inset-block-start: auto;
+    inset-block-end: 0;
+    align-self: end;
+    z-index: 1;
+  }
+}
